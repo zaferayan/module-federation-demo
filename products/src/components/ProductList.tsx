@@ -14,8 +14,9 @@ export default function ProductList() {
           style={{
             padding: "12px 16px",
             marginBottom: 8,
-            border: "1px solid #ddd",
-            borderRadius: 4,
+            border: "1px solid #2a2a2a",
+            borderRadius: 8,
+            background: "#1a1a1a",
             display: "flex",
             justifyContent: "space-between",
             alignItems: "center",

@@ -4,7 +4,7 @@ const ProductList = React.lazy(() => import("products/ProductList"));
 
 function ErrorFallback() {
   return (
-    <div style={{ padding: 20, border: "1px solid #e53e3e", borderRadius: 4, background: "#fff5f5", color: "#c53030" }}>
+    <div style={{ padding: 20, border: "1px solid #e53e3e", borderRadius: 8, background: "#2d1215", color: "#fc8181" }}>
       <strong>Remote unavailable.</strong> Make sure the Products app is running on port 3001.
     </div>
   );
@@ -29,16 +29,16 @@ class ErrorBoundary extends React.Component<
 
 export default function App() {
   return (
-    <div style={{ fontFamily: "system-ui, sans-serif", maxWidth: 800, margin: "0 auto", padding: 20 }}>
-      <header style={{ borderBottom: "2px solid #333", paddingBottom: 12, marginBottom: 24 }}>
-        <h1 style={{ margin: 0 }}>Shell (Host App)</h1>
-        <p style={{ margin: "4px 0 0", color: "#666" }}>
+    <div style={{ fontFamily: "system-ui, sans-serif", maxWidth: 800, margin: "0 auto", padding: "32px 20px" }}>
+      <header style={{ borderBottom: "1px solid #2a2a2a", paddingBottom: 12, marginBottom: 24 }}>
+        <h1 style={{ margin: 0, color: "#f0f0f0" }}>Shell (Host App)</h1>
+        <p style={{ margin: "4px 0 0", color: "#888" }}>
           Module Federation with Vite -- consuming remote ProductList
         </p>
       </header>
 
       <main>
-        <h2>Products from Remote</h2>
+        <h2 style={{ color: "#f0f0f0" }}>Products from Remote</h2>
         <ErrorBoundary>
           <Suspense fallback={<p>Loading remote ProductList...</p>}>
             <ProductList />
