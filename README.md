@@ -2,6 +2,20 @@
 
 A minimal Module Federation demo with Vite + React. The **Shell** (host) app loads a `ProductList` component from the **Products** (remote) app at runtime.
 
+## Screenshots
+
+### Shell (Host) — localhost:3000
+
+The host app lazy-loads `ProductList` from the remote at runtime:
+
+![Shell Host App](./assets/shell-host.png)
+
+### Products (Remote) — localhost:3001
+
+The remote app runs standalone and exposes `ProductList` via Module Federation:
+
+![Products Remote App](./assets/products-remote.png)
+
 ## Architecture
 
 ```
