@@ -1,8 +1,8 @@
 # Module Federation Demo
 
-A minimal Module Federation demo with Vite + React. The **Shell** (host) app loads a `ProductList` component from the **Products** (remote) app at runtime.
+Minimal bir Module Federation demo projesi. **Shell** (host) uygulaması, **Products** (remote) uygulamasından `ProductList` componentini runtime'da yükler.
 
-## Architecture
+## Mimari
 
 ```
 ┌─────────────────────────────┐        ┌─────────────────────────────┐
@@ -14,24 +14,24 @@ A minimal Module Federation demo with Vite + React. The **Shell** (host) app loa
 │              ProductList")  │        │  exposes:                   │
 │                             │        │    ./ProductList             │
 │  shared: react, react-dom   │◄──────►│  shared: react, react-dom   │
-│          (singleton)        │  same  │          (singleton)        │
-│                             │  copy  │                             │
+│          (singleton)        │  aynı  │          (singleton)        │
+│                             │  kopya │                             │
 └─────────────────────────────┘        └─────────────────────────────┘
 ```
 
-## Tech Stack
+## Teknolojiler
 
 - **Vite** + **React 18** + **TypeScript**
-- **@module-federation/vite** — runtime module sharing
-- **concurrently** — runs both dev servers in parallel
+- **@module-federation/vite** — runtime modül paylaşımı
+- **concurrently** — iki dev server'ı paralel çalıştırma
 
-## Setup
+## Kurulum
 
 ```bash
 npm run setup
 ```
 
-## Usage
+## Kullanım
 
 ```bash
 npm run dev
@@ -40,11 +40,11 @@ npm run dev
 - Shell (host): http://localhost:3000
 - Products (remote): http://localhost:3001
 
-## How It Works
+## Nasıl Çalışıyor?
 
-### 1. Remote exposes modules
+### 1. Remote kendini tanımlar
 
-The Products app exposes its `ProductList` component:
+Products uygulaması `ProductList` componentini dışarıya açar:
 
 ```ts
 // products/vite.config.ts
@@ -61,9 +61,9 @@ federation({
 });
 ```
 
-### 2. Host consumes the remote
+### 2. Host remote'u tüketir
 
-The Shell app discovers the Products remote via `remoteEntry.js`:
+Shell uygulaması Products'ın `remoteEntry.js` dosyasını keşfeder:
 
 ```ts
 // shell/vite.config.ts
@@ -83,9 +83,9 @@ federation({
 });
 ```
 
-### 3. Lazy loading
+### 3. Lazy loading ile kullanım
 
-The remote component is imported just like any other module:
+Remote component, normal bir modülmüşçesine import edilir:
 
 ```tsx
 // shell/src/App.tsx
@@ -100,58 +100,54 @@ const ProductList = React.lazy(() => import("products/ProductList"));
 
 ### 4. Async boundary
 
-A dynamic import in `main.tsx` is required for shared dependency negotiation:
+`main.tsx` dosyasında dinamik import, shared dependency negotiation için gereklidir:
 
 ```ts
 // shell/src/main.tsx
 import("./bootstrap");
 ```
 
-This gives Module Federation time to determine which singleton copy of React to use before the app renders.
+Bu satır Module Federation'ın React'in tek kopyasını (singleton) belirlemesi için zaman kazandırır.
 
-## Project Structure
+## Proje Yapısı
 
 ```
 module-federation-demo/
-├── package.json              # Root — runs both apps via concurrently
-├── shell/                    # Host app (port 3000)
-│   ├── vite.config.ts        # MF host configuration
+├── package.json              # Root — concurrently ile iki uygulamayı çalıştırır
+├── shell/                    # Host uygulama (port 3000)
+│   ├── vite.config.ts        # MF host konfigürasyonu
 │   ├── src/
 │   │   ├── main.tsx          # Async boundary (import("./bootstrap"))
 │   │   ├── bootstrap.tsx     # React root render
-│   │   └── App.tsx           # Layout + remote ProductList consumption
+│   │   └── App.tsx           # Layout + remote ProductList tüketimi
 │   └── index.html
-└── products/                 # Remote app (port 3001)
-    ├── vite.config.ts        # MF remote configuration
+└── products/                 # Remote uygulama (port 3001)
+    ├── vite.config.ts        # MF remote konfigürasyonu
     ├── src/
     │   ├── main.tsx          # Async boundary
     │   ├── bootstrap.tsx     # Standalone render
     │   └── components/
-    │       └── ProductList.tsx  # Exposed component
+    │       └── ProductList.tsx  # Expose edilen component
     └── index.html
 ```
 
-## Key Concepts
+## Temel Kavramlar
 
-| Concept | Description |
-|---------|-------------|
-| **Host** | App that consumes modules from remotes |
-| **Remote** | App that exposes modules to other apps |
-| **remoteEntry.js** | Remote's manifest file — declares available modules |
-| **Shared singleton** | Libraries like React are loaded only once and shared |
-| **Async boundary** | `import("./bootstrap")` — required for shared dependency negotiation |
+| Kavram | Açıklama |
+|--------|----------|
+| **Host** | Remote modüllerden component tüketen uygulama |
+| **Remote** | Modüllerini dışarıya açan uygulama |
+| **remoteEntry.js** | Remote'un manifest dosyası — hangi modüllerin mevcut olduğunu bildirir |
+| **Shared singleton** | React gibi kütüphanelerin tek kopya olarak paylaşımı |
+| **Async boundary** | `import("./bootstrap")` — shared dependency negotiation için gerekli |
 
-## Important Notes
+## Önemli Noktalar
 
-- When Products is independently deployed, Shell does **not** need to be rebuilt
-- `singleton: true` ensures only one copy of React is loaded
-- If the remote is unavailable, ErrorBoundary catches the error gracefully
-- `.__mf__temp/` and `@mf-types/` directories are auto-generated and excluded from git
+- Products bağımsız deploy edildiğinde Shell'in yeniden build edilmesine **gerek yoktur**
+- `singleton: true` sayesinde React'in tek kopyası kullanılır
+- Remote erişilemezse ErrorBoundary devreye girer, uygulama patlamaz
+- `.__mf__temp/` ve `@mf-types/` dizinleri otomatik oluşturulur, git'e eklenmez
 
-## Related Article
+## İlgili Yazı
 
-This demo accompanies the article [Module Federation vs. Single-SPA: Which One, When?](https://zaferayan.com)
-
----
-
-[Turkce README](./README.tr.md)
+Bu demo, [Module Federation vs. Single-SPA: Hangisi Ne Zaman Kullanılmalı?](https://zaferayan.com) makalesinin destekleyici projesidir.
